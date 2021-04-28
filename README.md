@@ -2,6 +2,8 @@
 
 > Sass is a stylesheet that's compiled to CSS.
 
+**SCSS Online Playground:** [sassmeister](https://www.sassmeister.com)
+
 ## $variables
 
 **CSS**
@@ -198,5 +200,83 @@ html {
   } @else {
     @return $width;
   }
+}
+
+.col {
+  width: colWidth(phone, 40px);
+}
+```
+
+**compiled css:**
+
+```css
+.col {
+  width: calc(100% - 40px);
+}
+```
+
+## Atom Features
+
+- starts with: `^`
+- ends with: `$`
+
+```scss
+// class starts with `col-`
+[class^='col-'] {
+  float: left;
+  background: green;
+
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+```
+
+```html
+<div>
+  <div class="col-6">one</div>
+  <div class="col-6">tow</div>
+</div>
+```
+
+- loop
+
+```scss
+$sizes: 40px, 50px, 80px;
+
+@each $size in $sizes {
+  .icon-#{$size} {
+    font-size: $size;
+  }
+}
+```
+
+**compiled css:**
+
+```css
+.icon-40px {
+  font-size: 40px;
+}
+
+.icon-50px {
+  font-size: 50px;
+}
+
+.icon-80px {
+  font-size: 80px;
+}
+```
+
+- adjust colors
+
+```scss
+$base-color: green;
+
+.card {
+  background: lighten($base-color, 25%);
+}
+
+.aside {
+  background: darken($base-color, 10%);
 }
 ```
