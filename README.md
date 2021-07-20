@@ -215,9 +215,17 @@ html {
 }
 ```
 
-## @import, @use, @include & @forward
+## @import, @use, @include & @forward <sup>[guide](https://css-tricks.com/introducing-sass-modules/)</sup>
 
 **@import:** It loads mixins, functions, and variables from other Sass stylesheets, and combines CSS from multiple stylesheets together. It makes everything globally accessible in the target file.\
+
+Limitations:
+
+- @import is also a CSS feature, and the differences can be confusing
+- If you @import the same file multiple times, it can slow down compilation, cause override conflicts, and generate duplicate output.
+- Everything is in the global namespace, including third-party packages – so my color() function might override your existing color() function, or vice versa.
+- When you use a function like color(). it’s impossible to know exactly where it was defined. Which @import does it come from?
+
 \
 ⚠️ Alert
 ```
@@ -227,6 +235,49 @@ Prefer the @use rule instead.
 ```
 
 **@use:** It also loads `mixins`, `functions`, and `variables` from other Sass stylesheets, and combines CSS from multiple stylesheets together. Stylesheets loaded by `@use` are called "modules". 
+
+- The file is only imported once, no matter how many times you @use it in a project.
+- Variables, mixins, and functions (what Sass calls “members”) that start with an underscore (_) or hyphen (-) are considered private, and not imported.
+- Members from the used file (buttons.scss in this case) are only made available locally, but not passed along to future imports.
+- Similarly, @extends will only apply up the chain; extending selectors in imported files, but not extending files that import this one.
+- All imported members are namespaced by default.
+
+```scss
+// _corners.scss
+
+$radius: 3px;
+
+@mixin roundedButton {
+  border-radius: $radius;
+  padding: 1rem;
+}
+```
+
+```scss
+// _button.scss
+
+@use 'corners'; // creates a `corners` namespace
+// @use 'conrners' as c;
+
+// @use 'buttons' as *; // the star removes any namespace
+// @include roundedButton;
+
+.boxButton {
+  // <namespace>.[$variable|@function()|@mixin()]
+  @include corners.roundedButton;
+  margin: 5px + corners.$radius;
+}
+```
+
+Plain CSS
+
+```css
+.button {
+  border-radius: 3px;
+  padding: 1rem;
+  margin: 8px;
+}
+```
 
 ## Atom Features
 
