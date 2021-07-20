@@ -4,7 +4,7 @@
 
 **SCSS Online Playground:** [sassmeister](https://www.sassmeister.com)
 
-## $variables
+## $variables <sup>[guide](https://sass-lang.com/documentation/variables)</sup>
 
 **CSS**
 
@@ -76,7 +76,7 @@ $red: hsl(0, 100%, 50%);
 }
 ```
 
-## @mixin
+## @mixin <sup>[guide](https://sass-lang.com/documentation/at-rules/mixin)</sup>
 
 > mixin allows to reuse similar group of styles in multiple classes
 
@@ -214,6 +214,19 @@ html {
   width: calc(100% - 40px);
 }
 ```
+
+## @import, @use, @include & @forward
+
+**@import:** It loads mixins, functions, and variables from other Sass stylesheets, and combines CSS from multiple stylesheets together. It makes everything globally accessible in the target file.\
+\
+⚠️ Alert
+```
+The Sass team discourages the continued use of the @import rule. 
+Sass will gradually phase it out over the next few years, and eventually remove it from the language entirely. 
+Prefer the @use rule instead.
+```
+
+**@use:** It also loads `mixins`, `functions`, and `variables` from other Sass stylesheets, and combines CSS from multiple stylesheets together. Stylesheets loaded by `@use` are called "modules". 
 
 ## Atom Features
 
