@@ -279,6 +279,78 @@ Plain CSS
 }
 ```
 
+**@forward:**
+
+The @forward rule loads a Sass stylesheet and makes its mixins, functions, and variables available when your stylesheet is loaded with the @use rule. It makes it possible to organize Sass libraries across many files, while allowing their users to load a single entrypoint file.
+
+```scss
+// src/_list.scss
+$horizontal-list-gap: 2em;
+
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin list-horizontal {
+  @include list-reset;
+
+  li {
+    display: inline-block;
+    margin: {
+      left: -2px;
+      right: $horizontal-list-gap;
+    }
+  }
+}
+```
+
+```scss
+// bootstrap.scss
+@forward "src/list";
+// @forward "src/list" as form-*; - adding prefix
+// @forward "src/list" hide list-reset, $horizontal-list-gap; - Controlling Visibility
+```
+
+```scss
+// styles.scss
+@use "bootstrap";
+
+li {
+  @include bootstrap.list-reset;
+  // @include bootstrap.form-list-reset;
+  // @include bootstrap.list-reset; - can't be accessed
+}
+```
+
+Configuring modules
+
+```scss
+// _library.scss
+$black: #000 !default; // The default allows a module to change the defaults of an upstream stylesheet while still allowing downstream stylesheets to override them.
+$border-radius: 0.25rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
+
+code {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+```
+
+```scss
+// _opinionated.scss
+@forward 'library' with (
+  $black: #222 !default,
+  $border-radius: 0.1rem !default
+);
+```
+
+```scss
+// style.scss
+@use 'opinionated' with ($black: #333);
+```
+
 ## Atom Features
 
 - starts with: `^`
